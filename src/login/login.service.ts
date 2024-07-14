@@ -1,26 +1,38 @@
-import { Injectable } from '@nestjs/common';
-import { CreateLoginDto } from './dto/create-login.dto';
-import { UpdateLoginDto } from './dto/update-login.dto';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/users/entities/user.entity';
+import { Repository } from 'typeorm';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class LoginService {
-  create(createLoginDto: CreateLoginDto) {
-    return 'This action adds a new login';
-  }
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
 
-  findAll() {
-    return `This action returns all login`;
-  }
+    private jwtService: JwtService,
+  ) {}
 
-  findOne(id: number) {
-    return `This action returns a #${id} login`;
-  }
-
-  update(id: number, updateLoginDto: UpdateLoginDto) {
-    return `This action updates a #${id} login`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} login`;
+  async signIn(email: string, pass: string): Promise<any> {
+    const user = await this.usersRepository.findOneBy({
+      email: email,
+    });
+    if (!user) throw new HttpException('Email incorreto', HttpStatus.NOT_FOUND);
+    if (!bcrypt.compareSync(pass, user.password)) {
+      throw new UnauthorizedException();
+    }
+    const payload = { sub: user.id, username: user.username };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+      name: user.name,
+      email: user.email,
+      id: user.id,
+    };
   }
 }
