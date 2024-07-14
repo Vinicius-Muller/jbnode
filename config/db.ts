@@ -13,6 +13,7 @@ export const dataSourceOptions: DataSourceOptions = {
   migrationsTableName: 'migrations',
   migrations: [__dirname + '/../migrations/*{.ts,.js}'],
   migrationsRun: true,
+  uuidExtension: 'pgcrypto',
 };
 
 const dataSource = new DataSource(dataSourceOptions);
