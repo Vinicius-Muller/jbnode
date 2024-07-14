@@ -1,4 +1,4 @@
-import { Role } from 'src/roles/entities/role.entity';
+import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
   Column,
@@ -7,37 +7,28 @@ import {
   UpdateDateColumn,
   Index,
   BeforeInsert,
-  OneToMany,
+  ManyToOne,
   JoinColumn,
 } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 
-@Entity('users')
-export class User {
+@Entity('roles')
+export class Role {
   @PrimaryGeneratedColumn('uuid', {
-    primaryKeyConstraintName: 'PKUsers',
+    primaryKeyConstraintName: 'PKRoles',
   })
-  @Index('INUsers', { unique: true })
+  @Index('INRoles', { unique: true })
   id: string;
-
-  @Column({ type: 'varchar', length: 60, nullable: false, unique: true })
-  email: string;
 
   @Column({ type: 'varchar', length: 60, nullable: false })
   name: string;
 
   @Column({ type: 'varchar', length: 60, nullable: false })
-  username: string;
+  partner: string;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  password: string;
-
-  @Column({ type: 'varchar', length: 60, nullable: false })
-  kind: string;
-
-  @OneToMany(() => Role, (role) => role.user)
-  @JoinColumn({ name: 'roles' })
-  roles: Role[];
+  @ManyToOne(() => User, (user) => user.roles)
+  @JoinColumn({ name: 'user_id' })
+  user: User[];
 
   @CreateDateColumn({ name: 'created_at', select: false })
   created_at: Date;

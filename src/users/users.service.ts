@@ -30,14 +30,36 @@ export class UsersService {
 
   async findAll() {
     try {
-      return await this.userRepository.find();
+      return await this.userRepository.find({
+        select: [
+          'name',
+          'username',
+          'email',
+          'id',
+          'kind',
+          'created_at',
+          'updated_at',
+        ],
+        relations: ['roles'],
+      });
     } catch (error) {
       throw error;
     }
   }
 
   async findOne(id: string | any) {
-    return await this.userRepository.findOne(id);
+    return await this.userRepository.findOne({
+      where: { id: id },
+      select: [
+        'name',
+        'username',
+        'email',
+        'id',
+        'kind',
+        'created_at',
+        'updated_at',
+      ],
+    });
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
