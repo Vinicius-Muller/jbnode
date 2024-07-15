@@ -6,4 +6,6 @@ export class CreateRoleDto {
 
   @IsNotEmpty()
   partner: string;
+
+  user_id: string;
 }

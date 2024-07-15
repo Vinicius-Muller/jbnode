@@ -26,9 +26,9 @@ export class Role {
   @Column({ type: 'varchar', length: 60, nullable: false })
   partner: string;
 
-  @ManyToOne(() => User, (user) => user.roles)
+  @ManyToOne(() => User, (user) => user.roles, { cascade: true })
   @JoinColumn({ name: 'user_id' })
-  user: User[];
+  user: User;
 
   @CreateDateColumn({ name: 'created_at', select: false })
   created_at: Date;
