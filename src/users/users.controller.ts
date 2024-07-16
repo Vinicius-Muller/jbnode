@@ -6,11 +6,13 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
+import { AuthGuard } from 'src/login/login.guard';
 
 @Controller('users')
 export class UsersController {
@@ -23,6 +25,7 @@ export class UsersController {
     return await this.usersService.create(createUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Get()
   async findAll(): Promise<User[]> {
     return await this.usersService.findAll();
