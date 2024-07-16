@@ -17,9 +17,18 @@ export class RolesService {
   ) {}
   async create(createRoleDto: CreateRoleDto) {
     try {
-      const role = this.roleRepository.create(createRoleDto);
-
-      return await this.roleRepository.save(role);
+      const user = await this.userRepository.findOne({
+        where: {
+          id: createRoleDto.user_id,
+        },
+      });
+      const role = this.roleRepository.create({
+        ...createRoleDto,
+        user: user,
+      });
+      const newRole = await this.roleRepository.save(role);
+      delete newRole.user.password;
+      return newRole;
     } catch (error) {
       throw error;
     }
@@ -27,9 +36,15 @@ export class RolesService {
 
   async findAll() {
     try {
-      return await this.roleRepository.find({
+      const roles = await this.roleRepository.find({
         relations: ['user'],
       });
+
+      roles.forEach((role) => {
+        delete role.user.password;
+      });
+
+      return roles;
     } catch (error) {
       throw error;
     }
@@ -37,7 +52,12 @@ export class RolesService {
 
   async findOne(id: string) {
     try {
-      return await this.roleRepository.findOne({ where: { id: id } });
+      const role = await this.roleRepository.findOne({
+        where: { id: id },
+        relations: ['user'],
+      });
+      delete role.user.password;
+      return role;
     } catch (error) {
       throw error;
     }
@@ -47,7 +67,18 @@ export class RolesService {
     try {
       await this.roleRepository.findOneByOrFail({ id: id });
 
-      await this.roleRepository.update(id, updateRoleDto);
+      const user = await this.userRepository.findOne({
+        where: {
+          id: updateRoleDto.user_id,
+        },
+      });
+
+      const role = this.roleRepository.create({
+        ...updateRoleDto,
+        user: user,
+      });
+
+      await this.roleRepository.update(id, role);
     } catch (error) {
       throw error;
     }

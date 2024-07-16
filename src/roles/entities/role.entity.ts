@@ -6,11 +6,9 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
-  BeforeInsert,
   ManyToOne,
   JoinColumn,
 } from 'typeorm';
-import { v4 as uuidv4 } from 'uuid';
 
 @Entity('roles')
 export class Role {
@@ -35,11 +33,4 @@ export class Role {
 
   @UpdateDateColumn({ name: 'updated_at', select: false })
   updated_at: Date;
-
-  @BeforeInsert()
-  generateId() {
-    if (!this.id) {
-      this.id = uuidv4();
-    }
-  }
 }
