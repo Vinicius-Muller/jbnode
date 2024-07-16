@@ -1,3 +1,4 @@
+import { Creator } from 'src/creators/entities/creator.entity';
 import { Role } from 'src/roles/entities/role.entity';
 import {
   Entity,
@@ -8,6 +9,7 @@ import {
   Index,
   OneToMany,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 @Entity('users')
@@ -36,6 +38,10 @@ export class User {
   @OneToMany(() => Role, (role) => role.user)
   @JoinColumn({ name: 'roles' })
   roles: Role[];
+
+  @OneToOne(() => Creator, (creator) => creator.user)
+  @JoinColumn({ name: 'creator_id' })
+  creator: Creator;
 
   @CreateDateColumn({ name: 'created_at', select: false })
   created_at: Date;
