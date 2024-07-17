@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateRoleDto } from './dto/create-role.dto';
 import { UpdateRoleDto } from './dto/update-role.dto';
 import { Role } from './entities/role.entity';
@@ -30,7 +30,7 @@ export class RolesService {
       delete newRole.user.password;
       return newRole;
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -46,7 +46,7 @@ export class RolesService {
 
       return roles;
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -59,7 +59,7 @@ export class RolesService {
       delete role.user.password;
       return role;
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -80,13 +80,17 @@ export class RolesService {
 
       await this.roleRepository.update(id, role);
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
   async remove(id: string) {
-    await this.roleRepository.findOneByOrFail({ id: id });
+    try {
+      await this.roleRepository.findOneByOrFail({ id: id });
 
-    await this.roleRepository.delete(id);
+      await this.roleRepository.delete(id);
+    } catch (error) {
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
+    }
   }
 }

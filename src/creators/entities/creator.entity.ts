@@ -33,9 +33,6 @@ export class Creator {
   @Column({ type: 'boolean', nullable: false })
   active: boolean;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
-  password: string;
-
   @CreateDateColumn({ name: 'created_at', select: false })
   created_at: Date;
 

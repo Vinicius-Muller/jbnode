@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -24,7 +24,7 @@ export class UsersService {
       delete user.password;
       return user;
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -40,10 +40,10 @@ export class UsersService {
           'created_at',
           'updated_at',
         ],
-        relations: ['roles'],
+        relations: ['roles', 'creator'],
       });
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -68,7 +68,7 @@ export class UsersService {
 
       await this.userRepository.update(id, updateUserDto);
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -78,7 +78,7 @@ export class UsersService {
 
       await this.userRepository.delete(id);
     } catch (error) {
-      throw error;
+      throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
   }
 }
