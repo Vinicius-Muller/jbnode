@@ -31,11 +31,13 @@ export class UsersController {
     return await this.usersService.findAll();
   }
 
+  @UseGuards(AuthGuard)
   @Get(':id')
   async findOne(@Param('id') id: string): Promise<User | undefined> {
     return await this.usersService.findOne(id);
   }
 
+  @UseGuards(AuthGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -44,8 +46,9 @@ export class UsersController {
     return await this.usersService.update(id, updateUserDto);
   }
 
+  @UseGuards(AuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
-    return this.usersService.remove(id);
+    return await this.usersService.remove(id);
   }
 }
