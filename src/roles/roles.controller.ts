@@ -42,7 +42,7 @@ export class RolesController {
   async update(
     @Param('id') id: string,
     @Body() updateRoleDto: UpdateRoleDto,
-  ): Promise<void> {
+  ): Promise<any> {
     return await this.rolesService.update(id, updateRoleDto);
   }
 

@@ -74,7 +74,11 @@ export class CreatorsService {
     try {
       await this.creatorsRepository.findOneByOrFail({ id: id });
 
-      await this.creatorsRepository.update(id, updateCreatorDto);
+      const updated = await this.creatorsRepository.update(
+        id,
+        updateCreatorDto,
+      );
+      return updated;
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }

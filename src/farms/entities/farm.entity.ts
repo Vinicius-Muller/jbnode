@@ -1,3 +1,4 @@
+import { Creator } from 'src/creators/entities/creator.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -6,23 +7,29 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   Index,
-  ManyToOne,
+  OneToOne,
   JoinColumn,
 } from 'typeorm';
 
-@Entity('roles')
-export class Role {
+@Entity('farms')
+export class Farm {
   @PrimaryGeneratedColumn('uuid', {
-    primaryKeyConstraintName: 'PKRoles',
+    primaryKeyConstraintName: 'PKFarms',
   })
-  @Index('INRoles', { unique: true })
+  @Index('INFarms', { unique: true })
   id: string;
 
   @Column({ type: 'varchar', length: 60, nullable: false })
   name: string;
 
+  @Column({ type: 'integer', nullable: false })
+  code_integration: number;
+
   @Column({ type: 'varchar', length: 60, nullable: false })
-  partner: string;
+  period_service: string;
+
+  @Column({ type: 'boolean', nullable: false })
+  active: boolean;
 
   @CreateDateColumn({ name: 'created_at', select: false })
   created_at: Date;
@@ -30,7 +37,7 @@ export class Role {
   @UpdateDateColumn({ name: 'updated_at', select: false })
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.roles, { cascade: true })
-  @JoinColumn({ name: 'user_id' })
-  user: User;
+  @OneToOne(() => Creator, (creator) => creator.farm)
+  @JoinColumn({ name: 'creator_id' })
+  creator: Creator;
 }

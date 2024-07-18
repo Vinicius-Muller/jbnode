@@ -35,6 +35,12 @@ export class User {
   @Column({ type: 'varchar', length: 60, nullable: false })
   kind: string;
 
+  @CreateDateColumn({ name: 'created_at', select: false })
+  created_at: Date;
+
+  @UpdateDateColumn({ name: 'updated_at', select: false })
+  updated_at: Date;
+
   @OneToMany(() => Role, (role) => role.user)
   @JoinColumn({ name: 'roles' })
   roles: Role[];
@@ -42,10 +48,4 @@ export class User {
   @OneToOne(() => Creator, (creator) => creator.user)
   @JoinColumn({ name: 'creator_id' })
   creator: Creator;
-
-  @CreateDateColumn({ name: 'created_at', select: false })
-  created_at: Date;
-
-  @UpdateDateColumn({ name: 'updated_at', select: false })
-  updated_at: Date;
 }
