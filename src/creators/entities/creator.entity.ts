@@ -1,3 +1,4 @@
+import { Farm } from 'src/farms/entities/farm.entity';
 import { User } from 'src/users/entities/user.entity';
 import {
   Entity,
@@ -42,4 +43,8 @@ export class Creator {
   @OneToOne(() => User, (user) => user.creator)
   @JoinColumn({ name: 'user_id' })
   user: User;
+
+  @OneToOne(() => Farm, (farm) => farm.creator)
+  @JoinColumn({ name: 'farm_id' })
+  farm: Farm;
 }

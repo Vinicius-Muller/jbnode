@@ -18,6 +18,7 @@ import { Creator } from './entities/creator.entity';
 export class CreatorsController {
   constructor(private readonly creatorsService: CreatorsService) {}
 
+  @UseGuards(AuthGuard)
   @Post()
   async create(@Body() createCreatorDto: CreateCreatorDto): Promise<Creator> {
     return await this.creatorsService.create(createCreatorDto);
@@ -40,7 +41,7 @@ export class CreatorsController {
   async update(
     @Param('id') id: string,
     @Body() updateCreatorsDto: UpdateCreatorDto,
-  ): Promise<void> {
+  ): Promise<any> {
     return await this.creatorsService.update(id, updateCreatorsDto);
   }
 

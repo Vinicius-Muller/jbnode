@@ -7,6 +7,7 @@ import { LoginModule } from './login/login.module';
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { CreatorsModule } from './creators/creators.module';
+import { FarmsModule } from './farms/farms.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot(dataSourceOptions),
@@ -14,6 +15,7 @@ import { CreatorsModule } from './creators/creators.module';
     UsersModule,
     RolesModule,
     CreatorsModule,
+    FarmsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

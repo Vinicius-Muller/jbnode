@@ -78,7 +78,8 @@ export class RolesService {
         user: user,
       });
 
-      await this.roleRepository.update(id, role);
+      const updateRole = await this.roleRepository.update(id, role);
+      return updateRole;
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }

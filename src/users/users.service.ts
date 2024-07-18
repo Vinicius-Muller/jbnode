@@ -66,7 +66,8 @@ export class UsersService {
     try {
       await this.userRepository.findOneByOrFail({ id: id });
 
-      await this.userRepository.update(id, updateUserDto);
+      const updateUser = await this.userRepository.update(id, updateUserDto);
+      return updateUser;
     } catch (error) {
       throw new HttpException(error, HttpStatus.BAD_REQUEST);
     }
